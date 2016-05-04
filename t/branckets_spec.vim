@@ -68,5 +68,25 @@ describe 'doorboy#brackts'
         Expect getline(1) == '()'
       end
     end
+
+    context 'and pressing space'
+      it 'should push brackets away'
+        call spec_helper#insert_chars(' here')
+        Expect getline(1) == '( here )'
+      end
+    end
+  end
+
+  context 'when cursor is between brackets with spacing'
+    before
+      call spec_helper#put_with_cursor('{ | }')
+    end
+
+    context 'and pressing backspace'
+      it 'should delete both sides of space'
+        call spec_helper#insert_bs()
+        Expect getline(1) == '{}'
+      end
+    end
   end
 end

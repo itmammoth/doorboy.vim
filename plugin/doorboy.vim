@@ -1,7 +1,11 @@
-" TODO: Vim global plugin for correcting typing mistakes
-" Last Change: 04-May-2016 22:51.
+"
+" doorboy.vim is a vim plugin for auto closing quotations/brackets and more.
+" TODO
+"
+" Version: 0.0.1
 " Maintainer: itmammoth <itmammoth@gmail.com>
 " License:	This file is placed in the public domain.
+"
 
 if exists("g:loaded_doorboy")
   finish
