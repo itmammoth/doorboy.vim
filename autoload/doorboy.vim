@@ -23,6 +23,7 @@ function! doorboy#initialize()
   endfor
 
   inoremap <expr> <BS> doorboy#mapping#backspace()
+  inoremap <expr> <SPACE> doorboy#mapping#space()
 endfunction
 
 function! s:escape(str)
