@@ -1,5 +1,6 @@
 set nocompatible
 set backspace=indent,eol,start
-filetype plugin indent on
 
 setlocal runtimepath+=.
+setlocal runtimepath+=./after
+filetype plugin indent on
