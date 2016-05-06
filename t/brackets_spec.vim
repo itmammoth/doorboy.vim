@@ -37,7 +37,7 @@ describe 'doorboy#brackts'
     end
   end
 
-  context 'when cursor is left of opening bracket'
+  context 'when cursor is in front of opening bracket'
     before
       call spec_helper#put_with_cursor('|()')
     end
@@ -46,6 +46,19 @@ describe 'doorboy#brackts'
       it 'should be (SKIP)'
         call spec_helper#insert_chars('(SKIP')
         Expect getline(1) == '(SKIP)'
+      end
+    end
+  end
+
+  context 'when cursor is in front of any character'
+    before
+      call spec_helper#put_with_cursor('|"text"')
+    end
+
+    context 'and putting ('
+      it 'should be ("text"'
+        call spec_helper#insert_chars('(')
+        Expect getline(1) == '("text"'
       end
     end
   end
