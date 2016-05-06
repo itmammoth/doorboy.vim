@@ -2,7 +2,7 @@ runtime! plugin/doorboy.vim
 
 source spec_helper.vim
 
-describe 'doorboy#quotations'
+describe 'quotations'
   before
     new
   end

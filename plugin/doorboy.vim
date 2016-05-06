@@ -2,7 +2,7 @@
 " doorboy.vim is a vim plugin for auto closing quotations/brackets and more.
 " TODO
 "
-" Version: 0.0.1
+" Version: 0.1.0
 " Maintainer: itmammoth <itmammoth@gmail.com>
 " License:	This file is placed in the public domain.
 "
