@@ -4,7 +4,7 @@ let s:BRACKETS = doorboy#var#BRACKETS
 function! doorboy#initialize()
   " Map for quotations
   for char in s:QUOTATIONS
-    let escaped_char = s:escape(char)
+    let escaped_char = escape(char, '"')
     execute 'inoremap' '<expr>' char
           \ 'doorboy#mapping#put_quotation("'.escaped_char.'")'
   endfor
@@ -24,8 +24,4 @@ function! doorboy#initialize()
 
   inoremap <expr> <BS> doorboy#mapping#backspace()
   inoremap <expr> <SPACE> doorboy#mapping#space()
-endfunction
-
-function! s:escape(str)
-  return substitute(a:str, '"', '\\"', 'g')
 endfunction
