@@ -14,27 +14,30 @@ let s:SPACE = " "
 """""""""" Mapped functions
 
 function! doorboy#mapping#put_quotation(quotation)
-  if s:next_char_equals_to(a:quotation)
+  let next = s:get_next_char()
+  if next ==# a:quotation
     return s:SKIP
   endif
-  if s:is_prev_char_word_char() || s:is_next_char_word_char()
+  let prev = s:get_prev_char()
+  if s:is_word(prev) || s:is_word(next)
     return a:quotation
   endif
   return a:quotation . a:quotation . s:BACK
 endfunction
 
 function! doorboy#mapping#put_opening_bracket(a_pair_of_brackets)
-  if s:next_char_equals_to(a:a_pair_of_brackets[0])
+  let next = s:get_next_char()
+  if next ==# a:a_pair_of_brackets[0]
     return s:SKIP
   endif
-  if s:is_next_char_present() && !s:is_next_char_closing_bracket()
+  if s:is_present(next) && !s:is_closing_bracket(next)
     return a:a_pair_of_brackets[0]
   endif
   return a:a_pair_of_brackets . s:BACK
 endfunction
 
 function! doorboy#mapping#put_closing_bracket(closing_bracket)
-  if s:next_char_equals_to(a:closing_bracket)
+  if s:get_next_char() ==# a:closing_bracket
     return s:SKIP
   endif
   return a:closing_bracket
@@ -74,31 +77,24 @@ function! s:get_before_prev_and_after_next_chars()
   return getline('.')[col('.') - 3] . getline('.')[col('.')]
 endfunction
 
-function! s:next_char_equals_to(char)
-  return s:get_next_char() ==# a:char
+function! s:is_present(char)
+  return len(a:char) > 0 && a:char !=# s:SPACE
 endfunction
 
-function! s:is_next_char_present()
-  return len(s:get_next_char()) > 0 && s:get_next_char() !=# ' '
+function! s:is_closing_bracket(char)
+  return index(s:CLOSING_BRACKETS, a:char) > -1
 endfunction
 
-function! s:is_next_char_closing_bracket()
-  return index(s:CLOSING_BRACKETS, s:get_next_char()) > -1
-endfunction
-
-function! s:is_prev_char_word_char()
-  return s:get_prev_char() =~ '\w'
-endfunction
-
-function! s:is_next_char_word_char()
-  return s:get_next_char() =~ '\w'
+function! s:is_word(char)
+  return a:char =~ '\w'
 endfunction
 
 function! s:is_between_quoations()
-  if !s:is_quotation(s:get_prev_char())
+  let prev = s:get_prev_char()
+  if !s:is_quotation(prev)
     return s:FALSE
   endif
-  return s:next_char_equals_to(s:get_prev_char())
+  return s:get_next_char() ==# prev
 endfunction
 
 function! s:is_quotation(char)
@@ -110,7 +106,9 @@ function! s:is_between_brackets()
 endfunction
 
 function! s:is_between_brackets_with_spacing()
-  if s:get_prev_char() ==# s:SPACE && s:get_next_char() ==# s:SPACE
+  let prev = s:get_prev_char()
+  let next = s:get_next_char()
+  if prev ==# s:SPACE && next ==# s:SPACE
     return index(s:BRACKETS, s:get_before_prev_and_after_next_chars()) > -1
   endif
   return s:FALSE
