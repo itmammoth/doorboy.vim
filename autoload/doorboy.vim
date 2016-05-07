@@ -1,27 +1,64 @@
-let s:QUOTATIONS = doorboy#var#QUOTATIONS
-let s:BRACKETS = doorboy#var#BRACKETS
+let s:QUOTATIONS = doorboy#var#get_quotations()
+let s:BRACKETS = doorboy#var#get_brackets()
+
 
 function! doorboy#initialize()
-  " Map for quotations
-  for char in s:QUOTATIONS
-    let escaped_char = escape(char, '"')
-    execute 'inoremap' '<expr>' char
-          \ 'doorboy#mapping#put_quotation("'.escaped_char.'")'
+  for quotation in s:QUOTATIONS
+    call s:define_quotation_map(quotation)
   endfor
 
-  " Map for brackets
   for a_pair_of_brackets in s:BRACKETS
-    if len(a_pair_of_brackets) != 2
-      echo 'Found unacceptable bracket ' . a_pair_of_brackets
-      echo 'A pair of brackets must consist of 2 characters'
-      continue
-    endif
-    execute 'inoremap' '<expr>' a_pair_of_brackets[0]
-          \ 'doorboy#mapping#put_opening_bracket("'.a_pair_of_brackets.'")'
-    execute 'inoremap' '<expr>' a_pair_of_brackets[1]
-          \ 'doorboy#mapping#put_closing_bracket("'.a_pair_of_brackets[1].'")'
+    call s:define_bracket_map(a_pair_of_brackets)
   endfor
 
   inoremap <expr> <BS> doorboy#mapping#backspace()
   inoremap <expr> <SPACE> doorboy#mapping#space()
+endfunction
+
+function! doorboy#add_quotation(quotation)
+  call add(s:QUOTATIONS, a:quotation)
+  call s:define_quotation_map(a:quotation)
+endfunction
+
+function! doorboy#disable_quotation(quotation)
+  let i = index(s:QUOTATIONS, a:quotation)
+  if i == -1
+    echo 'Not found such a quotation ' . a:quotation
+    return
+  endif
+  call remove(s:QUOTATIONS, i)
+  execute 'iunmap' s:to_map_key(a:quotation)
+endfunction
+
+
+function! s:define_quotation_map(quotation)
+  if len(a:quotation) != 1
+    echo 'Found unacceptable quotation ' . a:quotation
+    echo 'A quotation must consist of 1 character'
+    return
+  endif
+  execute 'inoremap' '<expr>' s:to_map_key(a:quotation)
+        \ 'doorboy#mapping#put_quotation("' . s:to_param(a:quotation) . '")'
+endfunction
+
+function! s:define_bracket_map(a_pair_of_brackets)
+  if len(a:a_pair_of_brackets) != 2
+    echo 'Found unacceptable bracket ' . a:a_pair_of_brackets
+    echo 'A pair of brackets must consist of 2 characters'
+    continue
+  endif
+  let op = a:a_pair_of_brackets[0]
+  let cl = a:a_pair_of_brackets[1]
+  execute 'inoremap' '<expr>' s:to_map_key(op)
+        \ 'doorboy#mapping#put_opening_bracket("' . s:to_param(op) . '","' . s:to_param(cl) . '")'
+  execute 'inoremap' '<expr>' s:to_map_key(cl)
+        \ 'doorboy#mapping#put_closing_bracket("' . s:to_param(cl) . '")'
+endfunction
+
+function! s:to_map_key(char)
+  return escape(a:char, '|')
+endfunction
+
+function! s:to_param(char)
+  return escape(s:to_map_key(a:char), '"')
 endfunction
