@@ -1,5 +1,5 @@
-let s:QUOTATIONS = doorboy#var#QUOTATIONS
-let s:BRACKETS = doorboy#var#BRACKETS
+let s:QUOTATIONS = doorboy#var#get_quotations()
+let s:BRACKETS = doorboy#var#get_brackets()
 let s:CLOSING_BRACKETS = map(deepcopy(s:BRACKETS), 'v:val[1]')
 
 let s:FALSE = 0
@@ -25,15 +25,15 @@ function! doorboy#mapping#put_quotation(quotation)
   return a:quotation . a:quotation . s:BACK
 endfunction
 
-function! doorboy#mapping#put_opening_bracket(a_pair_of_brackets)
+function! doorboy#mapping#put_opening_bracket(opening_bracket, closing_bracket)
   let next = s:get_next_char()
-  if next ==# a:a_pair_of_brackets[0]
+  if next ==# a:opening_bracket
     return s:SKIP
   endif
   if s:is_present(next) && !s:is_closing_bracket(next)
-    return a:a_pair_of_brackets[0]
+    return a:opening_bracket
   endif
-  return a:a_pair_of_brackets . s:BACK
+  return a:opening_bracket . a:closing_bracket . s:BACK
 endfunction
 
 function! doorboy#mapping#put_closing_bracket(closing_bracket)
