@@ -11,8 +11,16 @@ function! doorboy#initialize()
     call s:define_bracket_map(a_pair_of_brackets)
   endfor
 
-  inoremap <expr> <BS> doorboy#mapping#backspace()
-  inoremap <expr> <SPACE> doorboy#mapping#space()
+  call s:imap_unless_taken('<BS>', 'doorboy#map_backspace()')
+  call s:imap_unless_taken('<SPACE>', 'doorboy#map_space()')
+endfunction
+
+function! doorboy#map_backspace()
+  return doorboy#mapping#backspace()
+endfunction
+
+function! doorboy#map_space()
+  return doorboy#mapping#space()
 endfunction
 
 function! doorboy#add_quotation(quotation)
@@ -61,4 +69,11 @@ endfunction
 
 function! s:to_param(char)
   return escape(s:to_map_key(a:char), '"')
+endfunction
+
+function! s:imap_unless_taken(key, funcname)
+  let original_map = maparg(a:key, 'i')
+  if original_map ==# ''
+    execute 'inoremap' '<expr>' a:key a:funcname
+  endif
 endfunction
