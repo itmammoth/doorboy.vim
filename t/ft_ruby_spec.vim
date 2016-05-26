@@ -14,19 +14,28 @@ describe 'ftplugin/ruby'
     close!
   end
 
-  describe 'putting |'
-    context 'NOT in a regular expression'
-      it 'should put ||<LEFT>'
+  context 'when no characters in the current line'
+    context 'and putting |'
+      it 'should put | twice'
         call spec_helper#insert_chars('|ruby')
         Expect getline(1) == '|ruby|'
       end
     end
 
-    context 'in a regular expression'
-      before
-        call spec_helper#put_with_cursor('/(|)/')
+    context 'and putting /'
+      it 'should put / twice'
+        call spec_helper#insert_chars('/ruby')
+        Expect getline(1) == '/ruby/'
       end
-      it 'should put |'
+    end
+  end
+
+  context 'in a regular expression'
+    before
+      call spec_helper#put_with_cursor('/(|)/')
+    end
+    context 'and putting |'
+      it 'should put | once'
         call spec_helper#insert_chars('|ruby')
         Expect getline(1) == '/(|ruby)/'
       end
