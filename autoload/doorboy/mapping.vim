@@ -14,11 +14,11 @@ let s:SPACE = " "
 """""""""" Mapped functions
 
 function! doorboy#mapping#put_quotation(quotation)
-  if s:in_regular_expression()
-    return a:quotation
-  endif
   if s:get_next_char() ==# a:quotation
     return s:SKIP
+  endif
+  if s:in_regular_expression()
+    return a:quotation
   endif
   if s:get_left_str() !~ '\v%([\({\[>,\.]|\s|^)$'
     return a:quotation
