@@ -1,3 +1,7 @@
 .bundle
 .vim-flavor
 /vendor/bundle
+
+.DS_Store
+*.swp
+.p.vim
