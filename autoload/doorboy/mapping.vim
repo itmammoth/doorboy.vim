@@ -14,6 +14,9 @@ let s:SPACE = " "
 """""""""" Mapped functions
 
 function! doorboy#mapping#put_quotation(quotation)
+  if s:in_regular_expression()
+    return a:quotation
+  endif
   if s:get_next_char() ==# a:quotation
     return s:SKIP
   endif
@@ -118,4 +121,8 @@ function! s:is_between_brackets_with_spacing()
     return index(s:BRACKETS, s:get_before_prev_and_after_next_chars()) > -1
   endif
   return s:FALSE
+endfunction
+
+function! s:in_regular_expression()
+  return synIDattr(synID(line('.'), col('.'), 0), 'name') =~? 'regexp'
 endfunction
