@@ -14,12 +14,13 @@ let s:SPACE = " "
 """""""""" Mapped functions
 
 function! doorboy#mapping#put_quotation(quotation)
-  let next = s:get_next_char()
-  if next ==# a:quotation
+  if s:get_next_char() ==# a:quotation
     return s:SKIP
   endif
-  let prev = s:get_prev_char()
-  if s:is_word(prev) || s:is_word(next)
+  if s:get_left_str() !~ '\v%([\({\[>,\.]|\s|^)$'
+    return a:quotation
+  endif
+  if s:get_right_str() !~ '\v^%([\)}\]>,\.]|\s|$)'
     return a:quotation
   endif
   return a:quotation . a:quotation . s:BACK
@@ -69,6 +70,17 @@ function! s:get_next_char()
   return getline('.')[col('.') - 1]
 endfunction
 
+function! s:get_left_str()
+  if col('.') == 1
+    return ''
+  endif
+  return getline('.')[0 : col('.') - 2]
+endfunction
+
+function! s:get_right_str()
+  return getline('.')[col('.') - 1 : -1]
+endfunction
+
 function! s:get_prev_and_next_chars()
   return s:get_prev_char() . s:get_next_char()
 endfunction
@@ -83,10 +95,6 @@ endfunction
 
 function! s:is_closing_bracket(char)
   return index(s:CLOSING_BRACKETS, a:char) > -1
-endfunction
-
-function! s:is_word(char)
-  return a:char =~ '\w'
 endfunction
 
 function! s:is_between_quoations()

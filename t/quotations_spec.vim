@@ -104,6 +104,19 @@ describe 'quotations'
     end
   end
 
+  context 'when cursor is left of Japanese'
+    before
+      call spec_helper#put_with_cursor('|独自')
+    end
+
+    context 'and pressing "'
+      it 'should be "独自'
+        call spec_helper#insert_chars('"')
+        Expect getline(1) == '"独自'
+      end
+    end
+  end
+
   context 'when cursor is right of word'
     before
       call spec_helper#put_with_cursor('word|')
