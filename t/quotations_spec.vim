@@ -14,14 +14,14 @@ describe 'quotations'
   context 'when no characters in the current line'
     " double quotation "
     context 'and putting "#'
-      it 'should be "#"'
+      it 'should put " twice'
         call spec_helper#insert_chars('"#')
         Expect getline(1) == '"#"'
       end
     end
 
     context 'and putting ""#'
-      it 'should be ""#'
+      it 'should put " twice and skip'
         call spec_helper#insert_chars('""#')
         Expect getline(1) == '""#'
       end
@@ -29,14 +29,14 @@ describe 'quotations'
 
     " single quotation '
     context "and putting '#"
-      it "should be '#'"
+      it "should put ' twice"
         call spec_helper#insert_chars("'#")
         Expect getline(1) == "'#'"
       end
     end
 
     context "and putting ''#"
-      it "should be ''#"
+      it "should put ' twice and skip'"
         call spec_helper#insert_chars("''#")
         Expect getline(1) == "''#"
       end
@@ -44,14 +44,14 @@ describe 'quotations'
 
     " back quotation `
     context "and putting `#"
-      it "should be `#`"
+      it "should put ` twice"
         call spec_helper#insert_chars("`#")
         Expect getline(1) == "`#`"
       end
     end
 
     context "and putting ``#"
-      it "should be ``#"
+      it "should put ` twice and skip"
         call spec_helper#insert_chars("``#")
         Expect getline(1) == "``#"
       end
@@ -84,7 +84,7 @@ describe 'quotations'
     end
 
     context 'and pressing "'
-      it 'should be "word'
+      it 'should put " once'
         call spec_helper#insert_chars('"')
         Expect getline(1) == '"word'
       end
@@ -97,7 +97,7 @@ describe 'quotations'
     end
 
     context 'and pressing "'
-      it 'should be "word'
+      it 'should put " twice'
         call spec_helper#insert_chars('"')
         Expect getline(1) == '"",word'
       end
@@ -110,7 +110,7 @@ describe 'quotations'
     end
 
     context 'and pressing "'
-      it 'should be "独自'
+      it 'should put " once'
         call spec_helper#insert_chars('"')
         Expect getline(1) == '"独自'
       end
@@ -123,7 +123,7 @@ describe 'quotations'
     end
 
     context 'and pressing "'
-      it 'should be word"'
+      it 'should put " once'
         call spec_helper#append_chars('"')
         Expect getline(1) == 'word"'
       end

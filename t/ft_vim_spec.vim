@@ -7,6 +7,7 @@ describe 'ftplugin/vim'
     new
     filetype plugin on
     set filetype=vim
+    syntax on
   end
 
   after

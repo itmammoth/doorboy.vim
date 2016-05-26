@@ -14,7 +14,7 @@ describe 'brackts'
   context 'when no characters in the current line'
     " ()
     context 'and putting (#'
-      it 'should be (#)'
+      it 'should put ( twice'
         call spec_helper#insert_chars('(#')
         Expect getline(1) == '(#)'
       end
@@ -22,7 +22,7 @@ describe 'brackts'
 
     " {}
     context 'and putting {#'
-      it 'should be {#}'
+      it 'should put { twice'
         call spec_helper#insert_chars('{#')
         Expect getline(1) == '{#}'
       end
@@ -30,7 +30,7 @@ describe 'brackts'
 
     " []
     context 'and putting [#'
-      it 'should be [#]'
+      it 'should put [ twice'
         call spec_helper#insert_chars('[#')
         Expect getline(1) == '[#]'
       end
@@ -43,7 +43,7 @@ describe 'brackts'
     end
 
     context 'and putting (SKIP'
-      it 'should be (SKIP)'
+      it 'should skip'
         call spec_helper#insert_chars('(SKIP')
         Expect getline(1) == '(SKIP)'
       end
@@ -56,7 +56,7 @@ describe 'brackts'
     end
 
     context 'and putting ('
-      it 'should be ("text"'
+      it 'should put ( once'
         call spec_helper#insert_chars('(')
         Expect getline(1) == '("text"'
       end
