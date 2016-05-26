@@ -114,9 +114,7 @@ function! s:is_between_brackets()
 endfunction
 
 function! s:is_between_brackets_with_spacing()
-  let prev = s:get_prev_char()
-  let next = s:get_next_char()
-  if prev ==# s:SPACE && next ==# s:SPACE
+  if s:get_prev_char() ==# s:SPACE && s:get_next_char() ==# s:SPACE
     return index(s:BRACKETS, s:get_before_prev_and_after_next_chars()) > -1
   endif
   return s:FALSE
