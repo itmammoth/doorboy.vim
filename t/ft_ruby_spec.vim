@@ -31,13 +31,26 @@ describe 'ftplugin/ruby'
   end
 
   context 'in a regular expression'
-    before
-      call spec_helper#put_with_cursor('/(|)/')
+    context 'and in front of NOT /'
+      before
+        call spec_helper#put_with_cursor('/(|)/')
+      end
+      context 'and putting |'
+        it 'should put | once'
+          call spec_helper#insert_chars('|ruby')
+          Expect getline(1) == '/(|ruby)/'
+        end
+      end
     end
-    context 'and putting |'
-      it 'should put | once'
-        call spec_helper#insert_chars('|ruby')
-        Expect getline(1) == '/(|ruby)/'
+    context 'and in front of /'
+      before
+        call spec_helper#put_with_cursor('/ruby|/')
+      end
+      context 'and putting |'
+        it 'should skip'
+          call spec_helper#insert_chars('/ =~')
+          Expect getline(1) == '/ruby/ =~'
+        end
       end
     end
   end
