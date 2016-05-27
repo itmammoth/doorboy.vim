@@ -1,12 +1,3 @@
-"
-" doorboy.vim is a vim plugin for auto closing quotations/brackets and more.
-" TODO
-"
-" Version: 0.1.0
-" Maintainer: itmammoth <itmammoth@gmail.com>
-" License:	This file is placed in the public domain.
-"
-
 if exists("g:loaded_doorboy")
   finish
 endif
@@ -15,6 +6,9 @@ let g:loaded_doorboy = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
+
+inoremap <unique> <expr> <Plug>(doorboy_backspace) doorboy#map_backspace()
+inoremap <unique> <expr> <Plug>(doorboy_space) doorboy#map_space()
 
 call doorboy#initialize()
 

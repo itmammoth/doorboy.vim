@@ -1,7 +1,6 @@
 let s:QUOTATIONS = doorboy#var#get_quotations()
 let s:BRACKETS = doorboy#var#get_brackets()
 
-
 function! doorboy#initialize()
   for quotation in s:QUOTATIONS
     call s:define_quotation_map(quotation)
@@ -11,8 +10,8 @@ function! doorboy#initialize()
     call s:define_bracket_map(a_pair_of_brackets)
   endfor
 
-  call s:imap_unless_taken('<BS>', 'doorboy#map_backspace()')
-  call s:imap_unless_taken('<SPACE>', 'doorboy#map_space()')
+  call s:imap_unless_taken('<BS>', '<Plug>(doorboy_backspace)')
+  call s:imap_unless_taken('<SPACE>', '<Plug>(doorboy_space)')
 endfunction
 
 function! doorboy#map_backspace()
@@ -72,8 +71,7 @@ function! s:to_param(char)
 endfunction
 
 function! s:imap_unless_taken(key, funcname)
-  let original_map = maparg(a:key, 'i')
-  if original_map ==# ''
-    execute 'inoremap' '<expr>' a:key a:funcname
+  if !hasmapto(a:key, 'i')
+    execute 'imap' a:key a:funcname
   endif
 endfunction
