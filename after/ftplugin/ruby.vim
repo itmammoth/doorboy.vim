@@ -1,7 +1,3 @@
-"
-" doorboy.vim
-" after/ftplugin for ruby files
-"
 if exists('b:did_ftplugin_doorboy_ruby')
   finish
 endif

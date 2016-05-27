@@ -30,11 +30,11 @@ function! doorboy#mapping#put_quotation(quotation)
 endfunction
 
 function! doorboy#mapping#put_opening_bracket(opening_bracket, closing_bracket)
-  let next = s:get_next_char()
-  if next ==# a:opening_bracket
+  let next_char = s:get_next_char()
+  if next_char ==# a:opening_bracket
     return s:SKIP
   endif
-  if s:is_present(next) && !s:is_closing_bracket(next)
+  if s:is_present(next_char) && !s:is_closing_bracket(next_char)
     return a:opening_bracket
   endif
   return a:opening_bracket . a:closing_bracket . s:BACK
@@ -65,23 +65,28 @@ endfunction
 
 """""""""" Script local functions
 
+function! s:prev_char_index()
+  return col('.') - 2
+endfunction
+
+function! s:next_char_index()
+  return col('.') - 1
+endfunction
+
 function! s:get_prev_char()
-  return getline('.')[col('.') - 2]
+  return getline('.')[s:prev_char_index()]
 endfunction
 
 function! s:get_next_char()
-  return getline('.')[col('.') - 1]
+  return getline('.')[s:next_char_index()]
 endfunction
 
 function! s:get_left_str()
-  if col('.') == 1
-    return ''
-  endif
-  return getline('.')[0 : col('.') - 2]
+  return strpart(getline('.'), 0, col('.') - 1)
 endfunction
 
 function! s:get_right_str()
-  return getline('.')[col('.') - 1 : -1]
+  return getline('.')[ s:next_char_index() : -1 ]
 endfunction
 
 function! s:get_prev_and_next_chars()
@@ -89,11 +94,11 @@ function! s:get_prev_and_next_chars()
 endfunction
 
 function! s:get_before_prev_and_after_next_chars()
-  return getline('.')[col('.') - 3] . getline('.')[col('.')]
+  return getline('.')[s:prev_char_index() - 1] . getline('.')[s:next_char_index() + 1]
 endfunction
 
 function! s:is_present(char)
-  return len(a:char) > 0 && a:char !=# s:SPACE
+  return len(a:char) > 0 && a:char !~ '\s'
 endfunction
 
 function! s:is_closing_bracket(char)
@@ -101,11 +106,11 @@ function! s:is_closing_bracket(char)
 endfunction
 
 function! s:is_between_quoations()
-  let prev = s:get_prev_char()
-  if !s:is_quotation(prev)
+  let prev_char = s:get_prev_char()
+  if !s:is_quotation(prev_char)
     return s:FALSE
   endif
-  return s:get_next_char() ==# prev
+  return s:get_next_char() ==# prev_char
 endfunction
 
 function! s:is_quotation(char)

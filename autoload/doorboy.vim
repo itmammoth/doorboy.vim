@@ -1,6 +1,8 @@
 let s:QUOTATIONS = doorboy#var#get_quotations()
 let s:BRACKETS = doorboy#var#get_brackets()
 
+"""""""""" Autoload functions
+
 function! doorboy#initialize()
   for quotation in s:QUOTATIONS
     call s:define_quotation_map(quotation)
@@ -23,25 +25,26 @@ function! doorboy#map_space()
 endfunction
 
 function! doorboy#add_quotation(quotation)
-  call add(s:QUOTATIONS, a:quotation)
+  call doorboy#var#add_quotation(a:quotation)
   call s:define_quotation_map(a:quotation)
 endfunction
 
 function! doorboy#disable_quotation(quotation)
   let i = index(s:QUOTATIONS, a:quotation)
   if i == -1
-    echo 'Not found such a quotation ' . a:quotation
+    call s:show_error('Not found such a quotation ' . a:quotation)
     return
   endif
   call remove(s:QUOTATIONS, i)
   execute 'iunmap' s:to_map_key(a:quotation)
 endfunction
 
+"""""""""" Script local functions
 
 function! s:define_quotation_map(quotation)
   if len(a:quotation) != 1
-    echo 'Found unacceptable quotation ' . a:quotation
-    echo 'A quotation must consist of 1 character'
+    call s:show_error('Unacceptable quotation ' . a:quotation)
+    call s:show_error('A quotation must consist of 1 character')
     return
   endif
   execute 'inoremap' '<expr>' s:to_map_key(a:quotation)
@@ -50,8 +53,8 @@ endfunction
 
 function! s:define_bracket_map(a_pair_of_brackets)
   if len(a:a_pair_of_brackets) != 2
-    echo 'Found unacceptable bracket ' . a:a_pair_of_brackets
-    echo 'A pair of brackets must consist of 2 characters'
+    call s:show_error('Unacceptable bracket ' . a:a_pair_of_brackets)
+    call s:show_error('A pair of brackets must consist of 2 characters')
     continue
   endif
   let op = a:a_pair_of_brackets[0]
@@ -74,4 +77,8 @@ function! s:imap_unless_taken(key, funcname)
   if !hasmapto(a:key, 'i')
     execute 'inoremap' '<expr>' a:key a:funcname
   endif
+endfunction
+
+function! s:show_error(message)
+  echohl ErrorMsg | echo '[doorboy] ' . a:message | echohl None
 endfunction

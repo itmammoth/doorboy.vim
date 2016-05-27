@@ -1,7 +1,3 @@
-"
-" doorboy.vim
-" after/ftplugin for vim files
-"
 if exists('b:did_ftplugin_doorboy_vim')
   finish
 endif
@@ -15,8 +11,8 @@ function! s:put_double_quotation()
 endfunction
 
 function! s:is_beginning_of_line()
-  let right_from_cursor = strpart(getline('.'), 0, col('.')-1)
-	return right_from_cursor =~ "^\\s\*$"
+  let left_str = strpart(getline('.'), 0, col('.') - 1)
+	return left_str =~ "^\\s\*$"
 endfunction
 
 inoremap <buffer> <expr> " <SID>put_double_quotation()
