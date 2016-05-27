@@ -7,9 +7,6 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 
-inoremap <unique> <expr> <Plug>(doorboy_backspace) doorboy#map_backspace()
-inoremap <unique> <expr> <Plug>(doorboy_space) doorboy#map_space()
-
 call doorboy#initialize()
 
 

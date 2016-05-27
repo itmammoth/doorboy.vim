@@ -10,8 +10,8 @@ function! doorboy#initialize()
     call s:define_bracket_map(a_pair_of_brackets)
   endfor
 
-  call s:imap_unless_taken('<BS>', '<Plug>(doorboy_backspace)')
-  call s:imap_unless_taken('<SPACE>', '<Plug>(doorboy_space)')
+  call s:imap_unless_taken('<BS>', 'doorboy#map_backspace()')
+  call s:imap_unless_taken('<SPACE>', 'doorboy#map_space()')
 endfunction
 
 function! doorboy#map_backspace()
@@ -72,6 +72,6 @@ endfunction
 
 function! s:imap_unless_taken(key, funcname)
   if !hasmapto(a:key, 'i')
-    execute 'imap' a:key a:funcname
+    execute 'inoremap' '<expr>' a:key a:funcname
   endif
 endfunction
