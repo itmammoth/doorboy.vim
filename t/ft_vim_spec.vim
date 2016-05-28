@@ -2,16 +2,11 @@ runtime! plugin/doorboy.vim
 
 source spec_helper.vim
 
-describe 'ftplugin/vim'
-  before
-    new
-    filetype plugin on
-    set filetype=vim
-    syntax on
-  end
+set filetype=vim
 
+describe 'ftplugin/vim'
   after
-    close!
+    normal ggdG
   end
 
   context 'when putting "'

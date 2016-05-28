@@ -2,16 +2,11 @@ runtime! plugin/doorboy.vim
 
 source spec_helper.vim
 
-describe 'ftplugin/ruby'
-  before
-    new
-    filetype plugin on
-    set filetype=ruby
-    syntax on
-  end
+set filetype=ruby
 
+describe 'ftplugin/ruby'
   after
-    close!
+    normal ggdG
   end
 
   context 'when no characters in the current line'

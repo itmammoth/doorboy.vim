@@ -1,7 +1,3 @@
-let s:QUOTATIONS = doorboy#var#get_quotations()
-let s:BRACKETS = doorboy#var#get_brackets()
-let s:CLOSING_BRACKETS = map(deepcopy(s:BRACKETS), 'v:val[1]')
-
 let s:FALSE = 0
 let s:TRUE = !s:FALSE
 
@@ -102,7 +98,7 @@ function! s:is_present(char)
 endfunction
 
 function! s:is_closing_bracket(char)
-  return index(s:CLOSING_BRACKETS, a:char) > -1
+  return index(doorboy#var#get_closing_bracktes(&filetype), a:char) > -1
 endfunction
 
 function! s:is_between_quoations()
@@ -114,16 +110,16 @@ function! s:is_between_quoations()
 endfunction
 
 function! s:is_quotation(char)
-  return index(s:QUOTATIONS, a:char) > -1
+  return index(doorboy#var#get_quotations(&filetype), a:char) > -1
 endfunction
 
 function! s:is_between_brackets()
-  return index(s:BRACKETS, s:get_prev_and_next_chars()) > -1
+  return index(doorboy#var#get_brackets(&filetype), s:get_prev_and_next_chars()) > -1
 endfunction
 
 function! s:is_between_brackets_with_spacing()
   if s:get_prev_char() ==# s:SPACE && s:get_next_char() ==# s:SPACE
-    return index(s:BRACKETS, s:get_before_prev_and_after_next_chars()) > -1
+    return index(doorboy#var#get_brackets(&filetype), s:get_before_prev_and_after_next_chars()) > -1
   endif
   return s:FALSE
 endfunction

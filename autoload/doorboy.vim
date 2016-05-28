@@ -1,14 +1,12 @@
-let s:QUOTATIONS = doorboy#var#get_quotations()
-let s:BRACKETS = doorboy#var#get_brackets()
-
-"""""""""" Autoload functions
+let s:FALSE = 0
+let s:TRUE = !s:FALSE
 
 function! doorboy#initialize()
-  for quotation in s:QUOTATIONS
-    call s:define_quotation_map(quotation)
+  for quotation in doorboy#var#get_base_quotations()
+    call s:define_quotation_map(quotation, '')
   endfor
 
-  for a_pair_of_brackets in s:BRACKETS
+  for a_pair_of_brackets in doorboy#var#get_base_brackets()
     call s:define_bracket_map(a_pair_of_brackets)
   endfor
 
@@ -24,30 +22,39 @@ function! doorboy#map_space()
   return doorboy#mapping#space()
 endfunction
 
-function! doorboy#add_quotation(quotation)
-  call doorboy#var#add_quotation(a:quotation)
-  call s:define_quotation_map(a:quotation)
+function! doorboy#add_quotations(filetype, quotations)
+  for quotation in a:quotations
+    if s:validate_quotation(quotation)
+      if doorboy#var#add_additional_quotation(a:filetype, quotation)
+        call s:define_quotation_map(quotation, '<buffer>')
+      endif
+    endif
+  endfor
 endfunction
 
+" TODO: あとで
 function! doorboy#disable_quotation(quotation)
-  let i = index(s:QUOTATIONS, a:quotation)
+  let i = index(doorboy#var#get_base_quotations(), a:quotation)
   if i == -1
     call s:show_error('Not found such a quotation ' . a:quotation)
     return
   endif
-  call remove(s:QUOTATIONS, i)
+  call remove(doorboy#var#get_base_quotations(), i)
   execute 'iunmap' s:to_map_key(a:quotation)
 endfunction
 
-"""""""""" Script local functions
 
-function! s:define_quotation_map(quotation)
+function! s:validate_quotation(quotation)
   if len(a:quotation) != 1
     call s:show_error('Unacceptable quotation ' . a:quotation)
     call s:show_error('A quotation must consist of 1 character')
-    return
+    return s:FALSE
   endif
-  execute 'inoremap' '<expr>' s:to_map_key(a:quotation)
+  return s:TRUE
+endfunction
+
+function! s:define_quotation_map(quotation, lhs_opt)
+  execute 'inoremap' a:lhs_opt '<expr>' s:to_map_key(a:quotation)
         \ 'doorboy#mapping#put_quotation("' . s:to_param(a:quotation) . '")'
 endfunction
 

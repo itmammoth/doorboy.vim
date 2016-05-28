@@ -3,12 +3,8 @@ runtime! plugin/doorboy.vim
 source spec_helper.vim
 
 describe 'quotations'
-  before
-    new
-  end
-
   after
-    close!
+    normal ggdG
   end
 
   context 'when no characters in the current line'

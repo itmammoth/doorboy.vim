@@ -2,18 +2,16 @@ runtime! plugin/doorboy.vim
 
 source spec_helper.vim
 
-describe 'customizing'
-  before
-    new
-  end
+set filetype=vspec
 
+describe 'customizing'
   after
-    close!
+    normal ggdG
   end
 
   describe 'doorboy#add_quotation'
     before
-      call doorboy#add_quotation('|')
+      call doorboy#add_quotations('vspec', ['|'])
     end
 
     it 'should add custom quotation properly'

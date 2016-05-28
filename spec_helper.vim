@@ -1,5 +1,7 @@
 set nocompatible
 set backspace=indent,eol,start
+filetype plugin indent on
+syntax on
 
 function! spec_helper#put_with_cursor(exp)
   let curpos = stridx(a:exp, '|')
