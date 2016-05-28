@@ -1,6 +1,11 @@
 let s:FALSE = 0
 let s:TRUE = !s:FALSE
 
+"
+" Initializing process
+" - Map base quotations ('"`) and base brackets ((){}[])
+" - BS and Space also will be mapped unless they are already taken.
+"
 function! doorboy#initialize()
   for quotation in doorboy#var#get_base_quotations()
     call s:define_quotation_map(quotation, '')
@@ -14,14 +19,32 @@ function! doorboy#initialize()
   call s:imap_unless_taken('<SPACE>', 'doorboy#map_space()')
 endfunction
 
+"
+" Map Backspace on the dooyboy backspace function.
+" You can call this as mapped function like below
+" e.x.)
+" inoremap <expr> <BS> doorboy#map_backspace()
+"
 function! doorboy#map_backspace()
   return doorboy#mapping#backspace()
 endfunction
 
+"
+" Map Space on the dooyboy space function.
+" You can call this as mapped function like below
+" e.x.)
+" inoremap <expr> <Space> doorboy#map_space()
+"
 function! doorboy#map_space()
   return doorboy#mapping#space()
 endfunction
 
+"
+" Add special quotations in a particular filetype.
+" The given quotations will be mapped as buffer local mappings.
+" e.x.)
+" call doorboy#add_quotations('perl', ['/'])
+"
 function! doorboy#add_quotations(filetype, quotations)
   for quotation in a:quotations
     if s:validate_quotation(quotation)
@@ -32,17 +55,7 @@ function! doorboy#add_quotations(filetype, quotations)
   endfor
 endfunction
 
-" TODO: あとで
-function! doorboy#disable_quotation(quotation)
-  let i = index(doorboy#var#get_base_quotations(), a:quotation)
-  if i == -1
-    call s:show_error('Not found such a quotation ' . a:quotation)
-    return
-  endif
-  call remove(doorboy#var#get_base_quotations(), i)
-  execute 'iunmap' s:to_map_key(a:quotation)
-endfunction
-
+"""""""""" Script local functions
 
 function! s:validate_quotation(quotation)
   if len(a:quotation) != 1
