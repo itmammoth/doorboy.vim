@@ -94,9 +94,9 @@ function! s:to_param(char)
 endfunction
 
 function! s:imap_unless_taken(key, funcname)
-  if !hasmapto(a:key, 'i')
+  " if !hasmapto(a:key, 'i')
     execute 'inoremap' '<expr>' a:key a:funcname
-  endif
+  " endif
 endfunction
 
 function! s:show_error(message)
