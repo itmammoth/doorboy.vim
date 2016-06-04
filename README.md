@@ -1,5 +1,7 @@
 # doorboy.vim
 
+[![Build Status](https://travis-ci.org/itmammoth/doorboy.vim.svg?branch=master)](https://travis-ci.org/itmammoth/doorboy.vim)
+
 doorboy.vim is a smart plugin that serves you around brackets((){}[]) and quotations('"`).
 
 ![Screenshot](https://raw.githubusercontent.com/itmammoth/doorboy.vim/master/images/doorboy.gif)
