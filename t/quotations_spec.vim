@@ -87,15 +87,106 @@ describe 'quotations'
     end
   end
 
-  context 'when cursor is left of NOT word'
+  context 'when cursor is left of )'
     before
-      call spec_helper#put_with_cursor('|,word')
+      call spec_helper#put_with_cursor('|)')
     end
 
     context 'and pressing "'
       it 'should put " twice'
         call spec_helper#insert_chars('"')
-        Expect getline(1) == '"",word'
+        Expect getline(1) == '"")'
+      end
+    end
+  end
+
+  context 'when cursor is left of }'
+    before
+      call spec_helper#put_with_cursor('|}')
+    end
+
+    context 'and pressing "'
+      it 'should put " twice'
+        call spec_helper#insert_chars('"')
+        Expect getline(1) == '""}'
+      end
+    end
+  end
+
+  context 'when cursor is left of ]'
+    before
+      call spec_helper#put_with_cursor('|]')
+    end
+
+    context 'and pressing "'
+      it 'should put " twice'
+        call spec_helper#insert_chars('"')
+        Expect getline(1) == '""]'
+      end
+    end
+  end
+
+  context 'when cursor is left of >'
+    before
+      call spec_helper#put_with_cursor('|>')
+    end
+
+    context 'and pressing "'
+      it 'should put " twice'
+        call spec_helper#insert_chars('"')
+        Expect getline(1) == '"">'
+      end
+    end
+  end
+
+  context 'when cursor is left of ,'
+    before
+      call spec_helper#put_with_cursor('|,')
+    end
+
+    context 'and pressing "'
+      it 'should put " twice'
+        call spec_helper#insert_chars('"')
+        Expect getline(1) == '"",'
+      end
+    end
+  end
+
+  context 'when cursor is left of .'
+    before
+      call spec_helper#put_with_cursor('|.')
+    end
+
+    context 'and pressing "'
+      it 'should put " twice'
+        call spec_helper#insert_chars('"')
+        Expect getline(1) == '"".'
+      end
+    end
+  end
+
+  context 'when cursor is left of ='
+    before
+      call spec_helper#put_with_cursor('|=')
+    end
+
+    context 'and pressing "'
+      it 'should put " twice'
+        call spec_helper#insert_chars('"')
+        Expect getline(1) == '""='
+      end
+    end
+  end
+
+  context 'when cursor is left of space'
+    before
+      call spec_helper#put_with_cursor('| ')
+    end
+
+    context 'and pressing "'
+      it 'should put " twice'
+        call spec_helper#insert_chars('"')
+        Expect getline(1) == '"" '
       end
     end
   end
@@ -122,6 +213,110 @@ describe 'quotations'
       it 'should put " once'
         call spec_helper#append_chars('"')
         Expect getline(1) == 'word"'
+      end
+    end
+  end
+
+  context 'when cursor is right of ('
+    before
+      call spec_helper#put_with_cursor('(|')
+    end
+
+    context 'and pressing "'
+      it 'should put " twice'
+        call spec_helper#append_chars('"')
+        Expect getline(1) == '(""'
+      end
+    end
+  end
+
+  context 'when cursor is right of {'
+    before
+      call spec_helper#put_with_cursor('{|')
+    end
+
+    context 'and pressing "'
+      it 'should put " twice'
+        call spec_helper#append_chars('"')
+        Expect getline(1) == '{""'
+      end
+    end
+  end
+
+  context 'when cursor is right of ['
+    before
+      call spec_helper#put_with_cursor('[|')
+    end
+
+    context 'and pressing "'
+      it 'should put " twice'
+        call spec_helper#append_chars('"')
+        Expect getline(1) == '[""'
+      end
+    end
+  end
+
+  context 'when cursor is right of >'
+    before
+      call spec_helper#put_with_cursor('>|')
+    end
+
+    context 'and pressing "'
+      it 'should put " twice'
+        call spec_helper#append_chars('"')
+        Expect getline(1) == '>""'
+      end
+    end
+  end
+
+  context 'when cursor is right of ,'
+    before
+      call spec_helper#put_with_cursor(',|')
+    end
+
+    context 'and pressing "'
+      it 'should put " twice'
+        call spec_helper#append_chars('"')
+        Expect getline(1) == ',""'
+      end
+    end
+  end
+
+  context 'when cursor is right of .'
+    before
+      call spec_helper#put_with_cursor('.|')
+    end
+
+    context 'and pressing "'
+      it 'should put " twice'
+        call spec_helper#append_chars('"')
+        Expect getline(1) == '.""'
+      end
+    end
+  end
+
+  context 'when cursor is right of ='
+    before
+      call spec_helper#put_with_cursor('=|')
+    end
+
+    context 'and pressing "'
+      it 'should put " twice'
+        call spec_helper#append_chars('"')
+        Expect getline(1) == '=""'
+      end
+    end
+  end
+
+  context 'when cursor is right of space'
+    before
+      call spec_helper#put_with_cursor(' |')
+    end
+
+    context 'and pressing "'
+      it 'should put " twice'
+        call spec_helper#append_chars('"')
+        Expect getline(1) == ' ""'
       end
     end
   end

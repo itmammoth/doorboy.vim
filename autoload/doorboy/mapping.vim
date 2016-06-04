@@ -16,10 +16,10 @@ function! doorboy#mapping#put_quotation(quotation)
   if s:in_regular_expression()
     return a:quotation
   endif
-  if s:get_left_str() !~ '\v%([\({\[>,\.]|\s|^)$'
+  if s:get_left_str() !~ '\v%([\({\[>,\.=]|\s|^)$'
     return a:quotation
   endif
-  if s:get_right_str() !~ '\v^%([\)}\]>,\.]|\s|$)'
+  if s:get_right_str() !~ '\v^%([\)}\]>,\.=]|\s|$)'
     return a:quotation
   endif
   return a:quotation . a:quotation . s:BACK
