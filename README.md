@@ -86,7 +86,7 @@ Available mapping functions are
 
 e.x.)
 
-    # inoremap <expr><BS> neocomplete#smart_close_popup()."\<BS>"
+    " inoremap <expr><BS> neocomplete#smart_close_popup()."\<BS>"
     inoremap <expr><BS> neocomplete#smart_close_popup().doorboy#map_backspace()
 
 ## Adding quotations
