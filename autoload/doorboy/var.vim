@@ -21,7 +21,7 @@ endfunction
 " call doorboy#var#add_additional_quotation('ruby', '|')
 "
 function! doorboy#var#add_additional_quotation(filetype, quotation)
-  return s:add_additional(s:ADDITIONAL_QUOTATIONS, a:filetype, a:quotation)
+  call s:add_additional(s:ADDITIONAL_QUOTATIONS, a:filetype, a:quotation)
 endfunction
 
 "
@@ -30,7 +30,7 @@ endfunction
 " call doorboy#var#add_additional_brackets('xml', '<>')
 "
 function! doorboy#var#add_additional_brackets(filetype, a_pair_of_brackets)
-  return s:add_additional(s:ADDITIONAL_BRACKETS, a:filetype, a:a_pair_of_brackets)
+  call s:add_additional(s:ADDITIONAL_BRACKETS, a:filetype, a:a_pair_of_brackets)
 endfunction
 
 function! doorboy#var#get_additional_brackets(filetype)
@@ -53,8 +53,7 @@ endfunction
 function! s:add_additional(dict, filetype, value)
   let values = get(a:dict, a:filetype, [])
   if index(values, a:value) > -1
-    return s:FALSE
+    return
   endif
   let a:dict[a:filetype] = values + [a:value]
-  return s:TRUE
 endfunction

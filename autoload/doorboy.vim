@@ -48,9 +48,8 @@ endfunction
 function! doorboy#add_quotations(filetype, quotations)
   for quotation in a:quotations
     if s:validate_quotation(quotation)
-      if doorboy#var#add_additional_quotation(a:filetype, quotation)
-        call s:define_quotation_map(quotation, '<buffer>')
-      endif
+      call doorboy#var#add_additional_quotation(a:filetype, quotation)
+      call s:define_quotation_map(quotation, '<buffer>')
     endif
   endfor
 endfunction
