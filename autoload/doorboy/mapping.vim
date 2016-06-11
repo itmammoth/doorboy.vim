@@ -99,10 +99,6 @@ function! s:is_present(char)
   return len(a:char) > 0 && a:char !~ '\s'
 endfunction
 
-function! s:is_closing_bracket(char)
-  return index(doorboy#var#get_closing_bracktes(&filetype), a:char) > -1
-endfunction
-
 function! s:is_between_quoations()
   let prev_char = s:get_prev_char()
   if !s:is_quotation(prev_char)
