@@ -1,3 +1,0 @@
-[submodule "vim-slim"]
-	path = vim-slim
-	url = https://github.com/slim-template/vim-slim.git
