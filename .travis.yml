@@ -1,4 +1,6 @@
 language: ruby
 rvm:
   - 2.3.0
+before_install:
+  git clone https://github.com/slim-template/vim-slim.git vim-slim
 script: rake ci

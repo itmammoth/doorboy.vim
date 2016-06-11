@@ -2,6 +2,8 @@
 .vim-flavor
 /vendor/bundle
 
+/vim-slim
+
 .DS_Store
 *.swp
 .tags
