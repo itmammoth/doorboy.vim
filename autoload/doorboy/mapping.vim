@@ -6,6 +6,8 @@ let s:BACK = "\<LEFT>"
 let s:BS = "\<BS>"
 let s:DEL = "\<DEL>"
 let s:SPACE = " "
+let s:SEPARATOR_L_EXP = '\v%([\({\[>,\.=]|\s|^)$'
+let s:SEPARATOR_R_EXP = '\v^%([\)}\]>,\.=]|\s|$)'
 
 """""""""" Mapped functions
 
@@ -16,10 +18,10 @@ function! doorboy#mapping#put_quotation(quotation)
   if s:in_regular_expression()
     return a:quotation
   endif
-  if s:get_left_str() !~ '\v%([\({\[>,\.=]|\s|^)$'
+  if s:get_left_str() !~ s:SEPARATOR_L_EXP
     return a:quotation
   endif
-  if s:get_right_str() !~ '\v^%([\)}\]>,\.=]|\s|$)'
+  if s:get_right_str() !~ s:SEPARATOR_R_EXP
     return a:quotation
   endif
   return a:quotation . a:quotation . s:BACK
@@ -30,7 +32,7 @@ function! doorboy#mapping#put_opening_bracket(opening_bracket, closing_bracket)
   if next_char ==# a:opening_bracket
     return s:SKIP
   endif
-  if s:is_present(next_char) && !s:is_closing_bracket(next_char)
+  if s:is_present(next_char) && next_char !~ s:SEPARATOR_R_EXP
     return a:opening_bracket
   endif
   return a:opening_bracket . a:closing_bracket . s:BACK
@@ -95,10 +97,6 @@ endfunction
 
 function! s:is_present(char)
   return len(a:char) > 0 && a:char !~ '\s'
-endfunction
-
-function! s:is_closing_bracket(char)
-  return index(doorboy#var#get_closing_bracktes(&filetype), a:char) > -1
 endfunction
 
 function! s:is_between_quoations()

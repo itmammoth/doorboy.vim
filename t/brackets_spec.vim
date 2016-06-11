@@ -46,7 +46,7 @@ describe 'brackts'
     end
   end
 
-  context 'when cursor is in front of any character'
+  context 'when cursor is in front of word character'
     before
       call spec_helper#put_with_cursor('|"text"')
     end
@@ -55,6 +55,19 @@ describe 'brackts'
       it 'should put ( once'
         call spec_helper#insert_chars('(')
         Expect getline(1) == '("text"'
+      end
+    end
+  end
+
+  context 'when cursor is in front of separator character'
+    before
+      call spec_helper#put_with_cursor('|,')
+    end
+
+    context 'and putting ('
+      it 'should put ( twice'
+        call spec_helper#insert_chars('(')
+        Expect getline(1) == '(),'
       end
     end
   end
