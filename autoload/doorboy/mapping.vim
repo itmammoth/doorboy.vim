@@ -6,8 +6,6 @@ let s:BACK = "\<LEFT>"
 let s:BS = "\<BS>"
 let s:DEL = "\<DEL>"
 let s:SPACE = " "
-let s:SEPARATOR_L_EXP = '\v%([\({\[>,\.=]|\s|^)$'
-let s:SEPARATOR_R_EXP = '\v^%([\)}\]>,\.=]|\s|$)'
 
 """""""""" Mapped functions
 
@@ -18,10 +16,10 @@ function! doorboy#mapping#put_quotation(quotation)
   if s:in_regular_expression()
     return a:quotation
   endif
-  if s:get_left_str() !~ s:SEPARATOR_L_EXP
+  if s:get_left_str() !~ s:get_separator_l_exp()
     return a:quotation
   endif
-  if s:get_right_str() !~ s:SEPARATOR_R_EXP
+  if s:get_right_str() !~ s:get_separator_r_exp()
     return a:quotation
   endif
   return a:quotation . a:quotation . s:BACK
@@ -32,7 +30,7 @@ function! doorboy#mapping#put_opening_bracket(opening_bracket, closing_bracket)
   if next_char ==# a:opening_bracket
     return s:SKIP
   endif
-  if s:is_present(next_char) && next_char !~ s:SEPARATOR_R_EXP
+  if s:is_present(next_char) && next_char !~ s:get_separator_r_exp()
     return a:opening_bracket
   endif
   return a:opening_bracket . a:closing_bracket . s:BACK
@@ -124,4 +122,17 @@ endfunction
 
 function! s:in_regular_expression()
   return synIDattr(synID(line('.'), col('.'), 0), 'name') =~? 'regexp'
+endfunction
+
+function! s:get_separator_l_exp()
+  let addition = ''
+  if &filetype ==# 'python'
+    " for string flags like u"multibyte", r"\d\m"
+    let addition = 'ur'
+  endif
+  return '\v%([\({\[>,\.=' . addition . ']|\s|^)$'
+endfunction
+
+function! s:get_separator_r_exp()
+  return '\v^%([\)}\]>,\.=]|\s|$)'
 endfunction
