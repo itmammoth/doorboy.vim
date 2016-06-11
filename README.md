@@ -101,15 +101,19 @@ If you find your customizing useful for all vimmers, please just send me a pull 
 
 # Contribution
 
-Fork it, then run command `bundle install` to install `vim-flavor`.
+Fork it, then run the commands below for vim-flavored testing.
 
-`$ rake test` to run vspec.
+    $ bundle install
+    $ git clone https://github.com/slim-template/vim-slim.git vim-slim
+    $ rake test
 
-`blankslate.vimrc` is an essential vim script file for testing.
+(The slim ftplugin in dooboy requires vim-slim, so you need to git-clone it in your workspace.)
+
+`blankslate.vimrc` is an essential vim script file for manual testing.
 
     $ vim -u blankslate.vimrc
 
-and you can try vim plugged in doorboy.vim
+Now you can try vim plugged in doorboy.vim
 
 # License
 
