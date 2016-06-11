@@ -124,15 +124,27 @@ function! s:in_regular_expression()
   return synIDattr(synID(line('.'), col('.'), 0), 'name') =~? 'regexp'
 endfunction
 
+"
+" Return word separator regular expression for left of the cursor.
+"
+" You can override this by defining buffer local variable.
+" e.x.)
+" " For perl string flags
+" let b:separator_l_exp = '\v%([\({\[>,\.=ur]|\s|^)$'
+"
 function! s:get_separator_l_exp()
-  let addition = ''
-  if &filetype ==# 'python'
-    " for string flags like u"multibyte", r"\d\m"
-    let addition = 'ur'
+  if exists('b:separator_l_exp')
+    return b:separator_l_exp
   endif
-  return '\v%([\({\[>,\.=' . addition . ']|\s|^)$'
+  return '\v%([\({\[>,\.=]|\s|^)$'
 endfunction
 
+"
+" Return word separator regular expression for right of the cursor.
+"
 function! s:get_separator_r_exp()
+  if exists('b:separator_r_exp')
+    return b:separator_r_exp
+  endif
   return '\v^%([\)}\]>,\.=]|\s|$)'
 endfunction
