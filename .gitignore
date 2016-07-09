@@ -7,4 +7,4 @@
 .DS_Store
 *.swp
 .tags
-.p.vim
+.tablemaker.vim
