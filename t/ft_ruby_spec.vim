@@ -25,7 +25,7 @@ describe 'ftplugin/ruby'
     end
   end
 
-  context 'in a regular expression'
+  context 'when in regular expression'
     context 'and in front of NOT /'
       before
         call spec_helper#put_with_cursor('/(|)/')
@@ -45,6 +45,31 @@ describe 'ftplugin/ruby'
         it 'should skip'
           call spec_helper#insert_chars('/ =~')
           Expect getline(1) == '/ruby/ =~'
+        end
+      end
+    end
+  end
+
+  context 'when in string literals'
+    context 'and srrounded by "'
+      before
+        call spec_helper#put_with_cursor('"|"')
+      end
+      context 'and putting #var'
+        it 'should put #{}<LEFT>'
+          call spec_helper#insert_chars('#var')
+          Expect getline(1) == '"#{var}"'
+        end
+      end
+    end
+    context "and srrounded by '"
+      before
+        call spec_helper#put_with_cursor("'|'")
+      end
+      context 'and putting #'
+        it 'should just put #'
+          call spec_helper#insert_chars('#')
+          Expect getline(1) == "'#'"
         end
       end
     end
