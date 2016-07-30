@@ -11,8 +11,7 @@ function! s:put_double_quotation()
 endfunction
 
 function! s:is_beginning_of_line()
-  let left_str = strpart(getline('.'), 0, col('.') - 1)
-	return left_str =~ "^\\s\*$"
+	return doorboy#util#get_left_str() =~ "^\\s\*$"
 endfunction
 
 inoremap <buffer> <expr> " <SID>put_double_quotation()
