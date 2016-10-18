@@ -10,7 +10,5 @@ function! s:put_ruby_quotation(quotation)
   return a:quotation
 endfunction
 
-call doorboy#add_quotations('eruby', ['|', '/'])
-" Override key mappings defined by calling doorboy#add_quotations
 inoremap <buffer> <expr> \| <SID>put_ruby_quotation('\|')
 inoremap <buffer> <expr> / <SID>put_ruby_quotation('/')
