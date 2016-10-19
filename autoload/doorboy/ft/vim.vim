@@ -1,9 +1,10 @@
-if exists('b:did_ftplugin_doorboy_vim')
-  finish
-endif
-let b:did_ftplugin_doorboy_vim = 1
+" vim: set iskeyword-=#:
 
-function! s:put_double_quotation()
+function! doorboy#ft#vim#setup()
+  inoremap <buffer> <expr> " doorboy#ft#vim#put_double_quotation()
+endfunction
+
+function! doorboy#ft#vim#put_double_quotation()
 	if s:is_beginning_of_line()
 		return '"'
 	endif
@@ -13,5 +14,3 @@ endfunction
 function! s:is_beginning_of_line()
 	return doorboy#util#get_left_str() =~ "^\\s\*$"
 endfunction
-
-inoremap <buffer> <expr> " <SID>put_double_quotation()

@@ -1,76 +1,54 @@
-let s:BASE_QUOTATIONS = ['"', "'", "`"]
-let s:BASE_BRACKETS = ['()', '{}', '[]']
+" vim: set iskeyword-=#:
 
-let s:ADDITIONAL_QUOTATIONS = {}
+let s:QUOTATIONS = {}
+let s:DEFAULT_QUOTATIONS = {
+      \ '*': ['"', "'", '`'],
+      \ 'eruby': ['|', '/'],
+      \ 'javascript': ['/'],
+      \ 'perl': ['/'],
+      \ 'ruby': ['|', '/'],
+      \ 'slim': ['|', '/']
+      \ }
+
+let s:BASE_BRACKETS = ['()', '{}', '[]']
 let s:ADDITIONAL_BRACKETS = {}
 
 let s:FALSE = 0
 let s:TRUE = !s:FALSE
 
 function! doorboy#var#get_quotations(filetype)
-  "TODO: cache it
-  let nomap_quotations = []
-  if exists('g:doorboy_nomap_quotations')
-    if has_key(g:doorboy_nomap_quotations, '*')
-      call extend(nomap_quotations, get(g:doorboy_nomap_quotations, '*'))
-    endif
-    if has_key(g:doorboy_nomap_quotations, a:filetype)
-      call extend(nomap_quotations, get(g:doorboy_nomap_quotations, a:filetype))
-    endif
+  let ft_key = s:get_ft_key(a:filetype)
+  if has_key(s:QUOTATIONS, ft_key)
+    return s:QUOTATIONS[ft_key]
   endif
 
-  let quotations = []
-  for q in s:BASE_QUOTATIONS
-    if index(nomap_quotations, q) == -1
-      call add(quotations, q)
+  let quotations = copy(s:DEFAULT_QUOTATIONS['*'])
+  call extend(quotations, get(s:DEFAULT_QUOTATIONS, a:filetype, []))
+
+  if exists('g:doorboy_additional_quotations')
+    call extend(quotations, get(g:doorboy_additional_quotations, '*', []))
+    call extend(quotations, get(g:doorboy_additional_quotations, a:filetype, []))
+  endif
+
+  let nomap_quotations = []
+  if exists('g:doorboy_nomap_quotations')
+    call extend(nomap_quotations, get(g:doorboy_nomap_quotations, '*', []))
+    call extend(nomap_quotations, get(g:doorboy_nomap_quotations, a:filetype, []))
+  endif
+  for q in nomap_quotations
+    let i = index(quotations, q)
+    if i > -1
+      call remove(quotations, i)
     endif
   endfor
 
-  if exists('g:doorboy_additional_quotations')
-    if has_key(g:doorboy_additional_quotations, '*')
-      call extend(quotations, get(g:doorboy_additional_quotations, '*', []))
-    endif
-    if has_key(g:doorboy_additional_quotations, a:filetype)
-      call extend(quotations, get(g:doorboy_additional_quotations, a:filetype, []))
-    endif
-  endif
-
+  let s:QUOTATIONS[ft_key] = quotations
   return quotations
-endfunction
-
-function! doorboy#var#get_base_quotations()
-  return s:BASE_QUOTATIONS
 endfunction
 
 function! doorboy#var#get_base_brackets()
   return s:BASE_BRACKETS
 endfunction
-
-"
-" Add additional quotation in the specific filetype.
-" Ex)
-" call doorboy#var#add_additional_quotation('ruby', '|')
-"
-function! doorboy#var#add_additional_quotation(filetype, quotation)
-  call s:add_additional(s:ADDITIONAL_QUOTATIONS, a:filetype, a:quotation)
-endfunction
-
-"
-" Add additional brackets in the specific filetype.
-" Ex)
-" call doorboy#var#add_additional_brackets('xml', '<>')
-"
-function! doorboy#var#add_additional_brackets(filetype, a_pair_of_brackets)
-  call s:add_additional(s:ADDITIONAL_BRACKETS, a:filetype, a:a_pair_of_brackets)
-endfunction
-
-function! doorboy#var#get_additional_brackets(filetype)
-  return get(s:ADDITIONAL_BRACKETS, a:filetype, [])
-endfunction
-
-" function! doorboy#var#get_quotations(filetype)
-"   return s:BASE_QUOTATIONS + get(s:ADDITIONAL_QUOTATIONS, a:filetype, [])
-" endfunction
 
 function! doorboy#var#get_brackets(filetype)
   return s:BASE_BRACKETS + get(s:ADDITIONAL_BRACKETS, a:filetype, [])
@@ -81,10 +59,6 @@ function! doorboy#var#get_closing_bracktes(filetype)
 endfunction
 
 
-function! s:add_additional(dict, filetype, value)
-  let values = get(a:dict, a:filetype, [])
-  if index(values, a:value) > -1
-    return
-  endif
-  let a:dict[a:filetype] = values + [a:value]
+function! s:get_ft_key(filetype)
+  return a:filetype == '' ? '*' : a:filetype
 endfunction
