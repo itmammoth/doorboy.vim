@@ -7,6 +7,37 @@ let s:ADDITIONAL_BRACKETS = {}
 let s:FALSE = 0
 let s:TRUE = !s:FALSE
 
+function! doorboy#var#get_quotations(filetype)
+  "TODO: cache it
+  let nomap_quotations = []
+  if exists('g:doorboy_nomap_quotations')
+    if has_key(g:doorboy_nomap_quotations, '*')
+      call extend(nomap_quotations, get(g:doorboy_nomap_quotations, '*'))
+    endif
+    if has_key(g:doorboy_nomap_quotations, a:filetype)
+      call extend(nomap_quotations, get(g:doorboy_nomap_quotations, a:filetype))
+    endif
+  endif
+
+  let quotations = []
+  for q in s:BASE_QUOTATIONS
+    if index(nomap_quotations, q) == -1
+      call add(quotations, q)
+    endif
+  endfor
+
+  if exists('g:doorboy_additional_quotations')
+    if has_key(g:doorboy_additional_quotations, '*')
+      call extend(quotations, get(g:doorboy_additional_quotations, '*', []))
+    endif
+    if has_key(g:doorboy_additional_quotations, a:filetype)
+      call extend(quotations, get(g:doorboy_additional_quotations, a:filetype, []))
+    endif
+  endif
+
+  return quotations
+endfunction
+
 function! doorboy#var#get_base_quotations()
   return s:BASE_QUOTATIONS
 endfunction
@@ -37,9 +68,9 @@ function! doorboy#var#get_additional_brackets(filetype)
   return get(s:ADDITIONAL_BRACKETS, a:filetype, [])
 endfunction
 
-function! doorboy#var#get_quotations(filetype)
-  return s:BASE_QUOTATIONS + get(s:ADDITIONAL_QUOTATIONS, a:filetype, [])
-endfunction
+" function! doorboy#var#get_quotations(filetype)
+"   return s:BASE_QUOTATIONS + get(s:ADDITIONAL_QUOTATIONS, a:filetype, [])
+" endfunction
 
 function! doorboy#var#get_brackets(filetype)
   return s:BASE_BRACKETS + get(s:ADDITIONAL_BRACKETS, a:filetype, [])

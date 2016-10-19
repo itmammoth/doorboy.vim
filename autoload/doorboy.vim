@@ -1,14 +1,13 @@
 let s:FALSE = 0
 let s:TRUE = !s:FALSE
 
-"
-" Initializing process
-" - Map base quotations ('"`) and base brackets ((){}[])
-" - BS and Space also will be mapped unless they are already taken.
-"
-function! doorboy#initialize()
-  for quotation in doorboy#var#get_base_quotations()
-    call s:define_quotation_map(quotation, '')
+
+function! doorboy#setup()
+  call s:reset()
+  for q in doorboy#var#get_quotations(&filetype)
+    if s:validate_quotation(q)
+      call s:define_quotation_map(q)
+    endif
   endfor
 
   for a_pair_of_brackets in doorboy#var#get_base_brackets()
@@ -49,12 +48,22 @@ function! doorboy#add_quotations(filetype, quotations)
   for quotation in a:quotations
     if s:validate_quotation(quotation)
       call doorboy#var#add_additional_quotation(a:filetype, quotation)
-      call s:define_quotation_map(quotation, '<buffer>')
+      call s:define_quotation_map(quotation)
     endif
   endfor
 endfunction
 
 """""""""" Script local functions
+
+function! s:reset()
+  redir => mappings | silent! imap | redir END
+  for m in split(mappings, '\n')
+    if stridx(m, '@doorboy') > -1
+      let key = split(m, '\s\+')[1]
+      execute 'iunmap' '<buffer>' key
+    endif
+  endfor
+endfunction
 
 function! s:validate_quotation(quotation)
   if len(a:quotation) != 1
@@ -65,8 +74,8 @@ function! s:validate_quotation(quotation)
   return s:TRUE
 endfunction
 
-function! s:define_quotation_map(quotation, lhs_opt)
-  execute 'inoremap' a:lhs_opt '<expr>' s:to_map_key(a:quotation)
+function! s:define_quotation_map(quotation)
+  execute 'inoremap' '<buffer>' '<expr>' s:to_map_key(a:quotation)
         \ 'doorboy#mapping#put_quotation("' . s:to_param(a:quotation) . '")'
 endfunction
 
