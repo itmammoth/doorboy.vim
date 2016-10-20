@@ -35,12 +35,7 @@ function! doorboy#var#get_quotations(filetype)
     call extend(nomap_quotations, get(g:doorboy_nomap_quotations, '*', []))
     call extend(nomap_quotations, get(g:doorboy_nomap_quotations, a:filetype, []))
   endif
-  for q in nomap_quotations
-    let i = index(quotations, q)
-    if i > -1
-      call remove(quotations, i)
-    endif
-  endfor
+  call s:remove(quotations, nomap_quotations)
 
   let quotations = s:uniq(quotations)
   let s:QUOTATIONS[ft_key] = quotations
@@ -70,4 +65,13 @@ function! s:uniq(list)
     let hash[v] = 1
   endfor
   return keys(hash)
+endfunction
+
+function! s:remove(list, taken_away)
+  for v in a:taken_away
+    let i = index(a:list, v)
+    if i > -1
+      call remove(a:list, i)
+    endif
+  endfor
 endfunction
