@@ -1,3 +1,5 @@
+" vim: set iskeyword-=#:
+
 let s:FALSE = 0
 let s:TRUE = !s:FALSE
 

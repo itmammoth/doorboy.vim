@@ -1,22 +1,25 @@
+" vim: set iskeyword-=#:
+
 let s:FALSE = 0
 let s:TRUE = !s:FALSE
 
-"
-" Initializing process
-" - Map base quotations ('"`) and base brackets ((){}[])
-" - BS and Space also will be mapped unless they are already taken.
-"
-function! doorboy#initialize()
-  for quotation in doorboy#var#get_base_quotations()
-    call s:define_quotation_map(quotation, '')
+function! doorboy#setup()
+  call s:reset()
+
+  for q in doorboy#var#get_quotations(&filetype)
+    if s:validate_quotation(q)
+      call s:define_quotation_map(q)
+    endif
   endfor
 
-  for a_pair_of_brackets in doorboy#var#get_base_brackets()
+  for a_pair_of_brackets in doorboy#var#get_brackets(&filetype)
     call s:define_bracket_map(a_pair_of_brackets)
   endfor
 
   call s:imap_unless_taken('<BS>', 'doorboy#map_backspace()')
   call s:imap_unless_taken('<SPACE>', 'doorboy#map_space()')
+
+  call s:call_ft_setup(&filetype)
 endfunction
 
 "
@@ -39,22 +42,17 @@ function! doorboy#map_space()
   return doorboy#mapping#space()
 endfunction
 
-"
-" Add special quotations in a particular filetype.
-" The given quotations will be mapped as buffer local mappings.
-" e.x.)
-" call doorboy#add_quotations('perl', ['/'])
-"
-function! doorboy#add_quotations(filetype, quotations)
-  for quotation in a:quotations
-    if s:validate_quotation(quotation)
-      call doorboy#var#add_additional_quotation(a:filetype, quotation)
-      call s:define_quotation_map(quotation, '<buffer>')
+"""""""""" Script local functions
+
+function! s:reset()
+  redir => mappings | silent! imap | redir END
+  for m in split(mappings, '\n')
+    if stridx(m, '@doorboy') > -1
+      let char = split(m, '\s\+')[1]
+      execute 'iunmap' '<buffer>' s:to_map_key(char)
     endif
   endfor
 endfunction
-
-"""""""""" Script local functions
 
 function! s:validate_quotation(quotation)
   if len(a:quotation) != 1
@@ -65,8 +63,8 @@ function! s:validate_quotation(quotation)
   return s:TRUE
 endfunction
 
-function! s:define_quotation_map(quotation, lhs_opt)
-  execute 'inoremap' a:lhs_opt '<expr>' s:to_map_key(a:quotation)
+function! s:define_quotation_map(quotation)
+  execute 'inoremap' '<buffer>' '<expr>' s:to_map_key(a:quotation)
         \ 'doorboy#mapping#put_quotation("' . s:to_param(a:quotation) . '")'
 endfunction
 
@@ -78,9 +76,9 @@ function! s:define_bracket_map(a_pair_of_brackets)
   endif
   let op = a:a_pair_of_brackets[0]
   let cl = a:a_pair_of_brackets[1]
-  execute 'inoremap' '<expr>' s:to_map_key(op)
+  execute 'inoremap' '<buffer>' '<expr>' s:to_map_key(op)
         \ 'doorboy#mapping#put_opening_bracket("' . s:to_param(op) . '","' . s:to_param(cl) . '")'
-  execute 'inoremap' '<expr>' s:to_map_key(cl)
+  execute 'inoremap' '<buffer>' '<expr>' s:to_map_key(cl)
         \ 'doorboy#mapping#put_closing_bracket("' . s:to_param(cl) . '")'
 endfunction
 
@@ -94,7 +92,25 @@ endfunction
 
 function! s:imap_unless_taken(key, funcname)
   if maparg(a:key, 'i') ==# ''
-    execute 'inoremap' '<expr>' a:key a:funcname
+    execute 'inoremap' '<buffer>' '<expr>' a:key a:funcname
+  endif
+endfunction
+
+function! s:call_ft_setup(filetype)
+  "
+  " cannot get autoload function's references like below
+  " let Setup = function('doorboy#ft#ruby#setup')
+  "
+  if a:filetype ==# 'eruby'
+    call doorboy#ft#eruby#setup()
+  elseif a:filetype ==# 'python'
+    call doorboy#ft#python#setup()
+  elseif a:filetype ==# 'ruby'
+    call doorboy#ft#ruby#setup()
+  elseif a:filetype ==# 'slim'
+    call doorboy#ft#slim#setup()
+  elseif a:filetype ==# 'vim'
+    call doorboy#ft#vim#setup()
   endif
 endfunction
 

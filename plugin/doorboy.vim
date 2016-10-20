@@ -7,7 +7,11 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 
-call doorboy#initialize()
+call doorboy#setup()
+augroup doorboy_setup
+  autocmd!
+  autocmd FileType,BufNew,BufNewFile * call doorboy#setup()
+augroup END
 
 
 let &cpo = s:save_cpo

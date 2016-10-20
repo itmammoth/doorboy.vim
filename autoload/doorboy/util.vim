@@ -1,3 +1,5 @@
+" vim: set iskeyword-=#:
+
 let s:FALSE = 0
 let s:TRUE = !s:FALSE
 
@@ -18,7 +20,7 @@ endfunction
 
 function! doorboy#util#is_between_quoations()
   let prev_char = s:get_prev_char()
-  if !s:is_quotation(prev_char)
+  if !doorboy#util#is_quotation(&filetype, prev_char)
     return s:FALSE
   endif
   return doorboy#util#get_next_char() ==# prev_char
@@ -55,6 +57,10 @@ function! doorboy#util#in_double_quotation_string()
   return s:FALSE
 endfunction
 
+function! doorboy#util#is_quotation(filetype, char)
+  return index(doorboy#var#get_quotations(a:filetype), a:char) > -1
+endfunction
+
 
 function! s:prev_char_index()
   return col('.') - 2
@@ -74,8 +80,4 @@ endfunction
 
 function! s:get_before_prev_and_after_next_chars()
   return getline('.')[s:prev_char_index() - 1] . getline('.')[s:next_char_index() + 1]
-endfunction
-
-function! s:is_quotation(char)
-  return index(doorboy#var#get_quotations(&filetype), a:char) > -1
 endfunction
