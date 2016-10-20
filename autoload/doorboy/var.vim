@@ -42,6 +42,7 @@ function! doorboy#var#get_quotations(filetype)
     endif
   endfor
 
+  let quotations = s:uniq(quotations)
   let s:QUOTATIONS[ft_key] = quotations
   return quotations
 endfunction
@@ -61,4 +62,12 @@ endfunction
 
 function! s:get_ft_key(filetype)
   return a:filetype == '' ? '*' : a:filetype
+endfunction
+
+function! s:uniq(list)
+  let hash = {}
+  for v in a:list
+    let hash[v] = 1
+  endfor
+  return keys(hash)
 endfunction
