@@ -10,8 +10,7 @@ set cpo&vim
 call doorboy#setup()
 augroup doorboy_setup
   autocmd!
-  "TODO: not work in unnamed buffer
-  autocmd FileType,BufNewFile * call doorboy#setup()
+  autocmd FileType,BufNew,BufNewFile * call doorboy#setup()
 augroup END
 
 
