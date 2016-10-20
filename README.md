@@ -71,9 +71,16 @@ Auto closing brackets and quotations works properly in the cursor context.
 
 doorboy.vim automatically provides some key-mappings to you.
 
-* `"` `'` `\`
+##### Quotations
+* `"` `'` ` ` `
+* `|` `/` on filetype ruby
+* `/` on filetype javascript and perl
+
+##### Brackets
 * `(` `{` `[`
 * `)` `}` `]`
+
+##### Spaces
 * `<BS>`
 * `<Space>`
 
@@ -89,15 +96,47 @@ e.x.)
     " inoremap <expr><BS> neocomplete#smart_close_popup()."\<BS>"
     inoremap <expr><BS> neocomplete#smart_close_popup().doorboy#map_backspace()
 
-## Adding quotations
+## g:doorboy_additional_quotations
 
 In the doorboy definition, *quotation* means one character that opens a specific literal and closes it as well.
 
-You can dynamically add special quotations in a particular filetype. In `autocmd` or `after/ftplugin`,
+You can add quotations with letting `g:doorboy_additional_quotations` variable.
 
-    call doorboy#add_quotations('perl', ['/'])
+    "
+    " g:doorboy_additional_quotations must be a dictionary,
+    " and which has filetypes as its keys and quotations as its values.
+    " (filetype '*' means any filetypes.)
+    "
+    let g:doorboy_additional_quotations = {
+      \ '*': ['@'],
+      \ 'coffee': ['/']
+      \ }
 
 If you find your customizing useful for all vimmers, please just send me a pull request. Thanks.
+
+## g:doorboy_nomap_quotations
+
+You can keep some quotations from being mapped by doorboy with letting  `g:doorboy_nomap_quotations` variable.
+
+    let g:doorboy_nomap_quotations = {
+      \ 'javascript': ['/']
+      \ }
+
+## g:doorboy_additional_brackets
+
+You can add brackets with letting `g:doorboy_additional_brackets` variable.
+
+    let g:doorboy_additional_brackets = {
+      \ 'html': ['<>']
+      \ }
+
+## g:doorboy_nomap_brackets
+
+You can keep some brackets from being mapped by doorboy with letting  `g:doorboy_nomap_brackets` variable.
+
+    let g:doorboy_nomap_brackets = {
+      \ 'vim': ['{}']
+      \ }
 
 # Contribution
 
