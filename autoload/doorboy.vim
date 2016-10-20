@@ -12,7 +12,7 @@ function! doorboy#setup()
     endif
   endfor
 
-  for a_pair_of_brackets in doorboy#var#get_base_brackets()
+  for a_pair_of_brackets in doorboy#var#get_brackets(&filetype)
     call s:define_bracket_map(a_pair_of_brackets)
   endfor
 

@@ -10,8 +10,10 @@ let s:DEFAULT_QUOTATIONS = {
       \ 'slim': ['|', '/']
       \ }
 
-let s:BASE_BRACKETS = ['()', '{}', '[]']
-let s:ADDITIONAL_BRACKETS = {}
+let s:BRACKETS = {}
+let s:DEFAULT_BRACKETS = {
+      \ '*': ['()', '{}', '[]']
+      \ }
 
 let s:FALSE = 0
 let s:TRUE = !s:FALSE
@@ -42,16 +44,29 @@ function! doorboy#var#get_quotations(filetype)
   return quotations
 endfunction
 
-function! doorboy#var#get_base_brackets()
-  return s:BASE_BRACKETS
-endfunction
-
 function! doorboy#var#get_brackets(filetype)
-  return s:BASE_BRACKETS + get(s:ADDITIONAL_BRACKETS, a:filetype, [])
-endfunction
+  let ft_key = s:get_ft_key(a:filetype)
+  if has_key(s:BRACKETS, ft_key)
+    return s:BRACKETS[ft_key]
+  endif
 
-function! doorboy#var#get_closing_bracktes(filetype)
-  return map(deepcopy(doorboy#var#get_brackets(a:filetype)), 'v:val[1]')
+  let brackets = copy(s:DEFAULT_BRACKETS['*'])
+  call extend(brackets, get(s:DEFAULT_BRACKETS, a:filetype, []))
+
+  if exists('g:doorboy_additional_brackets')
+    call extend(brackets, get(g:doorboy_additional_brackets, '*', []))
+    call extend(brackets, get(g:doorboy_additional_brackets, a:filetype, []))
+  endif
+
+  let nomap_brackets = []
+  if exists('g:doorboy_nomap_brackets')
+    call extend(nomap_brackets, get(g:doorboy_nomap_brackets, '*', []))
+    call extend(nomap_brackets, get(g:doorboy_nomap_brackets, a:filetype, []))
+  endif
+  call s:remove(brackets, nomap_brackets)
+
+  let s:BRACKETS[ft_key] = brackets
+  return brackets
 endfunction
 
 
