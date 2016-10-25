@@ -22,6 +22,12 @@ describe 'ftplugin/eruby'
         Expect getline(1) == '/'
       end
     end
+    context 'and putting #'
+      it 'should put #'
+        call spec_helper#insert_chars('#')
+        Expect getline(1) == '#'
+      end
+    end
   end
 
   context 'when cursor is in ruby syntax'
@@ -41,6 +47,15 @@ describe 'ftplugin/eruby'
       it 'should put / twice'
         call spec_helper#append_chars('/pattern')
         Expect getline(1) == '<%= str =~ /pattern/'
+      end
+    end
+    context 'and putting # in string literals'
+      before
+        call spec_helper#put_with_cursor('<%= "|" %>')
+      end
+      it 'should put #{}<LEFT>'
+        call spec_helper#insert_chars('#value')
+        Expect getline(1) == '<%= "#{value}" %>'
       end
     end
   end
