@@ -1,13 +1,15 @@
 " vim: set iskeyword-=#:
 
 function! doorboy#ft#eruby#setup()
-  if doorboy#util#is_quotation('eruby', '|')
+  if doorboy#var#is_quotation('eruby', '|')
     inoremap <buffer> <expr> \| doorboy#ft#eruby#put_ruby_quotation('\|')
   endif
-  if doorboy#util#is_quotation('eruby', '/')
+  if doorboy#var#is_quotation('eruby', '/')
     inoremap <buffer> <expr> / doorboy#ft#eruby#put_ruby_quotation('/')
   endif
-  inoremap <buffer> <expr> # doorboy#ft#eruby#put_interpolation_in_string('#')
+  if !doorboy#var#is_nomap_quotation('eruby', '#')
+    inoremap <buffer> <expr> # doorboy#ft#eruby#put_interpolation_in_string('#')
+  endif
 endfunction
 
 function! doorboy#ft#eruby#put_ruby_quotation(quotation)

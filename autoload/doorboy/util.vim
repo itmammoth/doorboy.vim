@@ -20,7 +20,7 @@ endfunction
 
 function! doorboy#util#is_between_quoations()
   let prev_char = s:get_prev_char()
-  if !doorboy#util#is_quotation(&filetype, prev_char)
+  if !doorboy#var#is_quotation(&filetype, prev_char)
     return s:FALSE
   endif
   return doorboy#util#get_next_char() ==# prev_char
@@ -55,10 +55,6 @@ function! doorboy#util#in_double_quotation_string()
     return s:TRUE
   endif
   return s:FALSE
-endfunction
-
-function! doorboy#util#is_quotation(filetype, char)
-  return index(doorboy#var#get_quotations(a:filetype), a:char) > -1
 endfunction
 
 

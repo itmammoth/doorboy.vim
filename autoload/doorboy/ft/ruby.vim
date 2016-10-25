@@ -1,7 +1,9 @@
 " vim: set iskeyword-=#:
 
 function! doorboy#ft#ruby#setup()
-  inoremap <buffer> <expr> # doorboy#ft#ruby#put_interpolation_in_string('#')
+  if !doorboy#var#is_nomap_quotation('ruby', '#')
+    inoremap <buffer> <expr> # doorboy#ft#ruby#put_interpolation_in_string('#')
+  endif
 endfunction
 
 function! doorboy#ft#ruby#put_interpolation_in_string(char)

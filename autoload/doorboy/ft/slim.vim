@@ -6,9 +6,15 @@
 "
 
 function! doorboy#ft#slim#setup()
-  inoremap <buffer> <expr> \| doorboy#ft#slim#put_ruby_quotation('\|')
-  inoremap <buffer> <expr> / doorboy#ft#slim#put_ruby_quotation('/')
-  inoremap <buffer> <expr> # doorboy#ft#slim#put_interpolation_in_string('#')
+  if doorboy#var#is_quotation('slim', '|')
+    inoremap <buffer> <expr> \| doorboy#ft#slim#put_ruby_quotation('\|')
+  endif
+  if doorboy#var#is_quotation('slim', '/')
+    inoremap <buffer> <expr> / doorboy#ft#slim#put_ruby_quotation('/')
+  endif
+  if !doorboy#var#is_nomap_quotation('slim', '#')
+    inoremap <buffer> <expr> # doorboy#ft#slim#put_interpolation_in_string('#')
+  endif
 endfunction
 
 function! doorboy#ft#slim#put_ruby_quotation(quotation)

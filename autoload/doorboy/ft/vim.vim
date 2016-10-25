@@ -1,7 +1,9 @@
 " vim: set iskeyword-=#:
 
 function! doorboy#ft#vim#setup()
-  inoremap <buffer> <expr> " doorboy#ft#vim#put_double_quotation()
+  if doorboy#var#is_quotation('vim', '"')
+    inoremap <buffer> <expr> " doorboy#ft#vim#put_double_quotation()
+  endif
 endfunction
 
 function! doorboy#ft#vim#put_double_quotation()
