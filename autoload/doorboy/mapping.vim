@@ -77,7 +77,7 @@ function! s:get_separator_l_exp()
   if exists('b:separator_l_exp')
     return b:separator_l_exp
   endif
-  return '\v%([\({\[>,\.=]|\s|^)$'
+  return '\v%([\({\[>,\.=/]|\s|^)$'
 endfunction
 
 "
@@ -87,5 +87,5 @@ function! s:get_separator_r_exp()
   if exists('b:separator_r_exp')
     return b:separator_r_exp
   endif
-  return '\v^%([\)}\]>,\.=]|\s|$)'
+  return '\v^%([\)}\]>,\.=/]|\s|$)'
 endfunction
