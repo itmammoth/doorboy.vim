@@ -65,8 +65,9 @@ endfunction
 
 function! s:define_special_map(key)
   let plug = '<Plug>doorboy_' . a:key
-  if !hasmapto(plug, 'i')
-    execute 'imap' '<buffer>' '<' . a:key . '>' plug
+  let keyexp = '<' . a:key . '>'
+  if maparg(keyexp, 'i') == ''
+    execute 'imap' '<buffer>' keyexp plug
   endif
   execute 'imap' '<buffer>' '<script>' '<expr>' plug '<SID>doorboy_map_' . a:key . '()'
 endfunction
