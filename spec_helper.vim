@@ -21,3 +21,7 @@ endfunction
 function! spec_helper#insert_bs()
   execute "normal i\<BS>"
 endfunction
+
+function! spec_helper#insert_enter()
+  execute "normal i\<Enter>"
+endfunction
