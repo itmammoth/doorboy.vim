@@ -24,16 +24,32 @@ function! doorboy#setup()
   call s:call_ft_setup(&filetype)
 endfunction
 
-" Shortcuts for special mappings
-
+"
+" Map Backspace on the dooyboy backspace function.
+" You can call this as mapped function like below
+" e.x.)
+" inoremap <expr> <BS> doorboy#map_backspace()
+"
 function! doorboy#map_backspace()
   return doorboy#mapping#backspace()
 endfunction
 
+"
+" Map Space on the dooyboy space function.
+" You can call this as mapped function like below
+" e.x.)
+" inoremap <expr> <Space> doorboy#map_space()
+"
 function! doorboy#map_space()
   return doorboy#mapping#space()
 endfunction
 
+"
+" Map CR on the dooyboy CR function.
+" You can call this as mapped function like below
+" e.x.)
+" inoremap <expr> <CR> doorboy#map_cr()
+"
 function! doorboy#map_cr()
   return doorboy#mapping#cr()
 endfunction
