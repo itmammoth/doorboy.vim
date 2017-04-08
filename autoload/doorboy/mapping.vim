@@ -8,6 +8,9 @@ let s:BACK = "\<LEFT>"
 let s:BS = "\<BS>"
 let s:DEL = "\<DEL>"
 let s:SPACE = " "
+let s:CR = "\<CR>"
+let s:UP = "\<UP>"
+let s:TAB = "\<TAB>"
 
 """""""""" Mapped functions
 
@@ -59,6 +62,13 @@ function! doorboy#mapping#space()
     return s:SPACE . s:SPACE . s:BACK
   endif
   return s:SPACE
+endfunction
+
+function! doorboy#mapping#cr()
+  if doorboy#util#is_between_brackets()
+    return s:CR . s:CR . s:UP . s:TAB
+  endif
+  return s:CR
 endfunction
 
 function! s:is_present(char)

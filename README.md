@@ -64,6 +64,14 @@ Auto closing brackets and quotations works properly in the cursor context.
     Type: <BS>
     Then: |
 
+##### Smart new line
+
+    When: {|}
+    Type: <CR>
+    Then: {
+            |
+          }
+
 
 # Configuration
 
@@ -85,13 +93,18 @@ doorboy.vim automatically provides some key-mappings to you.
 * `<Space>`
 
 ##### NOTICE:
-doorboy.vim *NEVER* overwrites the mapping with `<BS>` and `<Space>` if these keys are already taken, so in such a case, you need to add the preferred mappings to your `.vimrc` file.
+doorboy.vim *NEVER* overwrites the mapping with `<BS>`,`<Space>` and `<CR>` if these keys are already taken, so in such a case, you need to add the preferred mappings to your `.vimrc` file.
 
 Available mapping functions are
-* doorboy#map_space
 * doorboy#map_backspace
+* doorboy#map_space
+* doorboy#map_cr
 
-e.x.)
+_For instance_ (to go with neocomplete + endwise)
+
+    " inoremap <expr> <CR> (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
+    inoremap <CR> <Plug>MyCR
+    inoremap <expr> <Plug>MyCR (pumvisible() ? "\<C-y>" : "" ) . doorboy#map_cr()
 
     " inoremap <expr><BS> neocomplete#smart_close_popup()."\<BS>"
     inoremap <expr><BS> neocomplete#smart_close_popup().doorboy#map_backspace()

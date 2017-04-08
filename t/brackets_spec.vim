@@ -97,6 +97,15 @@ describe 'brackts'
         Expect getline(1) == '( here )'
       end
     end
+
+    context 'and pressing cr'
+      it 'should push out the closing bracket'
+        call spec_helper#insert_cr()
+        Expect getline(1) == '('
+        Expect getline(2) == "\t"
+        Expect getline(3) == ')'
+      end
+    end
   end
 
   context 'when cursor is between brackets with spacing'

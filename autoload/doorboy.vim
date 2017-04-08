@@ -3,8 +3,9 @@
 let s:FALSE = 0
 let s:TRUE = !s:FALSE
 
+
 function! doorboy#setup()
-  call s:reset()
+  call s:reset_mappings()
 
   for q in doorboy#var#get_quotations(&filetype)
     if s:validate_quotation(q)
@@ -16,8 +17,9 @@ function! doorboy#setup()
     call s:define_bracket_map(a_pair_of_brackets)
   endfor
 
-  call s:imap_unless_taken('<BS>', 'doorboy#map_backspace()')
-  call s:imap_unless_taken('<SPACE>', 'doorboy#map_space()')
+  for key in ['bs', 'space', 'cr']
+    call s:define_special_map(key)
+  endfor
 
   call s:call_ft_setup(&filetype)
 endfunction
@@ -42,12 +44,21 @@ function! doorboy#map_space()
   return doorboy#mapping#space()
 endfunction
 
-"""""""""" Script local functions
+"
+" Map CR on the dooyboy CR function.
+" You can call this as mapped function like below
+" e.x.)
+" inoremap <expr> <CR> doorboy#map_cr()
+"
+function! doorboy#map_cr()
+  return doorboy#mapping#cr()
+endfunction
 
-function! s:reset()
+
+function! s:reset_mappings()
   redir => mappings | silent! imap | redir END
   for m in split(mappings, '\n')
-    if stridx(m, '@doorboy') > -1
+    if stridx(m, 'doorboy_map') > -1
       let char = split(m, '\s\+')[1]
       execute 'iunmap' '<buffer>' s:to_map_key(char)
     endif
@@ -65,7 +76,7 @@ endfunction
 
 function! s:define_quotation_map(quotation)
   execute 'inoremap' '<buffer>' '<expr>' s:to_map_key(a:quotation)
-        \ 'doorboy#mapping#put_quotation("' . s:to_param(a:quotation) . '")'
+        \ '<SID>doorboy_map_quotation("' . s:to_param(a:quotation) . '")'
 endfunction
 
 function! s:define_bracket_map(a_pair_of_brackets)
@@ -77,10 +88,47 @@ function! s:define_bracket_map(a_pair_of_brackets)
   let op = a:a_pair_of_brackets[0]
   let cl = a:a_pair_of_brackets[1]
   execute 'inoremap' '<buffer>' '<expr>' s:to_map_key(op)
-        \ 'doorboy#mapping#put_opening_bracket("' . s:to_param(op) . '","' . s:to_param(cl) . '")'
+        \ '<SID>doorboy_map_opening_bracket("' . s:to_param(op) . '","' . s:to_param(cl) . '")'
   execute 'inoremap' '<buffer>' '<expr>' s:to_map_key(cl)
-        \ 'doorboy#mapping#put_closing_bracket("' . s:to_param(cl) . '")'
+        \ '<SID>doorboy_map_closing_bracket("' . s:to_param(cl) . '")'
 endfunction
+
+function! s:define_special_map(key)
+  let plug = '<Plug>doorboy_' . a:key
+  let keyexp = '<' . a:key . '>'
+  if maparg(keyexp, 'i') == ''
+    execute 'imap' '<buffer>' keyexp plug
+  endif
+  execute 'imap' '<buffer>' '<script>' '<expr>' plug '<SID>doorboy_map_' . a:key . '()'
+endfunction
+
+""" <SID>functions must be started with 'doorboy_map_'
+
+function! s:doorboy_map_quotation(quotation)
+  return doorboy#mapping#put_quotation(a:quotation)
+endfunction
+
+function! s:doorboy_map_opening_bracket(op, cl)
+  return doorboy#mapping#put_opening_bracket(a:op, a:cl)
+endfunction
+
+function! s:doorboy_map_closing_bracket(cl)
+  return doorboy#mapping#put_closing_bracket(a:cl)
+endfunction
+
+function! s:doorboy_map_bs()
+  return doorboy#mapping#backspace()
+endfunction
+
+function! s:doorboy_map_space()
+  return doorboy#mapping#space()
+endfunction
+
+function! s:doorboy_map_cr()
+  return doorboy#mapping#cr()
+endfunction
+
+"""
 
 function! s:to_map_key(char)
   return escape(a:char, '|')
@@ -90,15 +138,9 @@ function! s:to_param(char)
   return escape(s:to_map_key(a:char), '"')
 endfunction
 
-function! s:imap_unless_taken(key, funcname)
-  if maparg(a:key, 'i') ==# ''
-    execute 'inoremap' '<buffer>' '<expr>' a:key a:funcname
-  endif
-endfunction
-
 function! s:call_ft_setup(filetype)
   "
-  " cannot get autoload function's references like below
+  " Cannot get autoload function's references like below
   " let Setup = function('doorboy#ft#ruby#setup')
   "
   if a:filetype ==# 'eruby'
