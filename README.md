@@ -91,6 +91,7 @@ doorboy.vim automatically provides some key-mappings to you.
 ##### Spaces
 * `<BS>`
 * `<Space>`
+* `<CR>`
 
 ##### NOTICE:
 doorboy.vim *NEVER* overwrites the mapping with `<BS>`,`<Space>` and `<CR>` if these keys are already taken, so in such a case, you need to add the preferred mappings to your `.vimrc` file.
