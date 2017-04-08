@@ -24,6 +24,20 @@ function! doorboy#setup()
   call s:call_ft_setup(&filetype)
 endfunction
 
+" Shortcuts for special mappings
+
+function! doorboy#map_backspace()
+  return doorboy#mapping#backspace()
+endfunction
+
+function! doorboy#map_space()
+  return doorboy#mapping#space()
+endfunction
+
+function! doorboy#map_cr()
+  return doorboy#mapping#cr()
+endfunction
+
 
 function! s:reset_mappings()
   redir => mappings | silent! imap | redir END
