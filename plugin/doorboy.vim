@@ -1,4 +1,4 @@
-if exists("g:loaded_doorboy")
+if exists('g:loaded_doorboy')
   finish
 endif
 let g:loaded_doorboy = 1
