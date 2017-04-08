@@ -98,9 +98,9 @@ describe 'brackts'
       end
     end
 
-    context 'and pressing enter'
+    context 'and pressing cr'
       it 'should push out the closing bracket'
-        call spec_helper#insert_enter()
+        call spec_helper#insert_cr()
         Expect getline(1) == '('
         Expect getline(2) == "\t"
         Expect getline(3) == ')'

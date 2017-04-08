@@ -18,7 +18,7 @@ function! doorboy#setup()
 
   call s:imap_unless_taken('<BS>', 'doorboy#map_backspace()')
   call s:imap_unless_taken('<SPACE>', 'doorboy#map_space()')
-  call s:imap_unless_taken('<ENTER>', 'doorboy#map_enter()')
+  call s:imap_unless_taken('<CR>', 'doorboy#map_cr()')
 
   call s:call_ft_setup(&filetype)
 endfunction
@@ -47,10 +47,10 @@ endfunction
 " Map Enter on the dooyboy enter function.
 " You can call this as mapped function like below
 " e.x.)
-" inoremap <expr> <Enter> doorboy#map_enter()
+" inoremap <expr> <Enter> doorboy#map_cr()
 "
-function! doorboy#map_enter()
-  return doorboy#mapping#enter()
+function! doorboy#map_cr()
+  return doorboy#mapping#cr()
 endfunction
 
 """""""""" Script local functions

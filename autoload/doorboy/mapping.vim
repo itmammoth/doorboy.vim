@@ -8,7 +8,7 @@ let s:BACK = "\<LEFT>"
 let s:BS = "\<BS>"
 let s:DEL = "\<DEL>"
 let s:SPACE = " "
-let s:ENTER = "\<ENTER>"
+let s:CR = "\<CR>"
 let s:UP = "\<UP>"
 let s:TAB = "\<TAB>"
 
@@ -64,11 +64,11 @@ function! doorboy#mapping#space()
   return s:SPACE
 endfunction
 
-function! doorboy#mapping#enter()
+function! doorboy#mapping#cr()
   if doorboy#util#is_between_brackets()
-    return s:ENTER . s:ENTER . s:UP . s:TAB
+    return s:CR . s:CR . s:UP . s:TAB
   endif
-  return s:ENTER
+  return s:CR
 endfunction
 
 function! s:is_present(char)

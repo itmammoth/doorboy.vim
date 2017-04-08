@@ -22,6 +22,6 @@ function! spec_helper#insert_bs()
   execute "normal i\<BS>"
 endfunction
 
-function! spec_helper#insert_enter()
-  execute "normal i\<Enter>"
+function! spec_helper#insert_cr()
+  execute "normal i\<CR>"
 endfunction
